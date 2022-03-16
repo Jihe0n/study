@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.model.dao.BoardMapper">
+	<select id="selectNow" resultType="com.example.demo.model.dto.boardtb" parameterType="com.example.demo.model.dto.formData">
+		select bt.board_id , bt.title , bt.contents, bt.create_id, bt.create_dtime, bt.last_id, bt.last_dtime,
+		ut.user_nm 
+		from boardtb bt full outer join usertb ut 
+		on bt.create_id = ut.user_id 
+		
+		<where>
+		
+			<if test=" selectOption == 'title'">
+				bt.title like '%'||#{inputValue}||'%'
+			</if>
+
+			<if test=" selectOption == 'contents'">
+				bt.contents like '%'||#{inputValue}||'%'
+			</if>
+		
+			<if test=" selectOption == 'none'">
+				(bt.title || ut.user_nm) like '%'||#{inputValue}||'%'
+			</if>
+		
+		</where>
+
+
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
