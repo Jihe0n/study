@@ -1,26 +1,70 @@
 <template>
     <div>
-        <label for="text">text</label>
-        <input id="text" type="text" v-model="str" />
-        <br />
-        <label for="integer1">integer1</label>
-        <input id="integer1" type="number" v-model="integer1" />
-        <br />
-        <label for="integer2">integer2</label>
-        <input id="integer2" type="number" v-model="integer2" />
-        <br />
-        <button @click="passGet">get</button>
-        <button @click="passPost">post</button>
+        <select
+            name="combo"
+            id="combo"
+            class="form-select form-select-lg m-2"
+            aria-label="Default select example"
+            style="width: 400px"
+        >
+            <option value="none">선택</option>
+            <option value="title">제목</option>
+            <option value="contents">내용</option>
+        </select>
 
-        <br />
-        <br />
-        <div>
-            <label for="newText">text</label>
-            <input id="newText" type="text" v-model="newStr" />
-            <br />
-            <label for="sum">sum</label>
-            <input id="sum" type="text" v-model="sum" />
+        <div class="input-group m-2" style="width: 400px">
+            <input
+                v-model="inputValue"
+                @keyup.enter="search"
+                type="text"
+                class="form-control"
+                aria-label="Recipient's username"
+                aria-describedby="button-addon2"
+            />
+            <button
+                @click="search"
+                class="btn btn-outline-secondary"
+                type="button"
+                id="button-addon2"
+            >
+                Search
+            </button>
         </div>
+
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">내용</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">작성일시</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                    <td>@twitter</td>
+                </tr>
+            </tbody>
+        </table>
+        {{ returnobj }}
     </div>
 </template>
 
@@ -29,33 +73,29 @@ import axios from "axios";
 export default {
     data() {
         return {
-            str: " ",
-            integer1: null,
-            integer2: null,
-            sum: null,
-            newStr: "",
+            selectOption: null,
+            inputValue: null,
+            returnobj: {},
         };
     },
     methods: {
-        passGet() {
-            axios
-                .get("/api/get")
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-        passPost() {
-            axios
-                .post("/api/post", [this.str, this.integer1, this.integer2])
-                .then((res) => {
-                    const newAry = res.data.split(",");
-                    this.sum = newAry[1];
-                    this.newStr = newAry[0];
+        search() {
+            var elment = document.getElementById("combo");
+            var selectInex =
+                document.getElementById("combo").options.selectedIndex;
+            this.selectOption = elment.options[selectInex].value;
 
-                    console.log(newAry);
+            const formData = {
+                selectOption: this.selectOption,
+                inputValue: this.inputValue,
+            };
+            console.log(formData);
+
+            axios
+                .post("/api/test", formData)
+                .then((res) => {
+                    console.log(res.data);
+                    this.returnobj = res.data;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -65,4 +105,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.inputBox,
+button {
+    margin-left: 0.3rem;
+}
+</style>
