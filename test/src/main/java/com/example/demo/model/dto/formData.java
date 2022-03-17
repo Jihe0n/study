@@ -8,6 +8,9 @@ import lombok.Data;
 @AllArgsConstructor
 @NoAutoStart
 public class formData {
+	public formData() {
+		
+	}
 	private String selectOption;
 	private String inputValue;
 }

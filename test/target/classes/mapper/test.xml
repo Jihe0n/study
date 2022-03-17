@@ -7,28 +7,26 @@
 		from boardtb bt full outer join usertb ut 
 		on bt.create_id = ut.user_id 
 		
-		<where>
-		
-			<if test=" selectOption == 'title'">
-				bt.title like '%'||#{inputValue}||'%'
+		<where>	
+			<if test=" selectOption == 'title' ">
+				bt.title like '%'||#{inputValue}||'%' 
 			</if>
 
-			<if test=" selectOption == 'contents'">
-				bt.contents like '%'||#{inputValue}||'%'
+			<if test=" selectOption == 'contents' ">
+				bt.contents like '%${inputValue}%'
 			</if>
 		
-			<if test=" selectOption == 'none'">
-				(bt.title || ut.user_nm) like '%'||#{inputValue}||'%'
+			<if test=" selectOption == 'none' ">
+				(bt.title || ut.user_nm) like '%${inputValue}%'
 			</if>
-		
 		</where>
-
-
 	</select>
+	
+	
+	
+
+	
 </mapper>
-
-
-
 
 
 
